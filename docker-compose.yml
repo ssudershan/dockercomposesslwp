@@ -3,6 +3,7 @@ services:
     web:
         image: nginx:alpine
         volumes:
+            - "./etc/nginx/hufta.conf:/etc/nginx/conf.d/default.conf"  
             - "./etc/nginx/hufta.conf:/etc/nginx/conf.d/hufta.conf"        
             - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
             - "./etc/ssl/:/etc/nginx/ssl/"
