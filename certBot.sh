@@ -1,0 +1,1 @@
+docker run -it --rm --name certbot   -v  /$(pwd)/etc/ssl/hufta/hufta.com:/etc/letsencrypt   -v /$(pwd)/var/log/letsencrypt:/var/log/letsencrypt   -v /$(pwd)/web/letsencrypt/:/var/www  certbot/certbot:latest -t certonly   --quiet --agree-tos --renew-by-default  --email admin@hufta.com --webroot -w /var/www   -d hufta.com -d www.hufta.com

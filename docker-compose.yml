@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+    web:
+        image: nginx:alpine
+        volumes:
+            - "./etc/nginx/hufta.conf:/etc/nginx/conf.d/hufta.conf"        
+            - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
+            - "./etc/ssl/:/etc/nginx/ssl/"
+            - "./web:/var/www/html"
+            - "./var/log/nginx/:/etc/nginx/log/"
+        ports:
+            - "0.0.0.0:80:80"
+            - "0.0.0.0:443:443"
+        environment:
+            - NGINX_HOST=${NGINX_HOST}
+        restart: always
+        depends_on:
+            - mysqldb
+            - wordpress
+    wordpress:
+        image: wordpress:${PHP_VERSION}
+        restart: always
+        volumes:
+            - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+            - "./web:/var/www/html"
+            - "./var/log/php/:/var/log/"
+    mysqldb:
+        image: mysql:${MYSQL_VERSION}
+        volumes:
+            - "./var/log/mysql/:/var/log/"
+            - "./data/db/mysql:/var/lib/mysql"   
+        container_name: ${MYSQL_HOST}
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "8989:3306"
+
